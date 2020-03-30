@@ -1,0 +1,30 @@
+from pyzabbix import ZabbixAPI
+import csv
+
+zapi = ZabbixAPI('http://ip_address/zabbix/', user='user_name', password='pwd')
+
+hostfile = csv.reader(open('zabbix_camera.csv'), delimiter=';')
+
+
+for [host_name,visible,ip,group_id] in hostfile:
+	hostadd = zapi.host.create(
+        host= host_name,
+        name= visible,
+        status= 0,
+        interfaces=[{
+            "type": 1,
+            "main": "1",
+            "useip": 1,
+            "ip": ip,
+            "dns": "",
+            "port": 10050
+        }],
+        groups=[{
+            "groupid": group_id
+        }],
+        templates=[{
+            "templateid": 10186
+        }]
+    )
+
+print ("Hosts upload")
