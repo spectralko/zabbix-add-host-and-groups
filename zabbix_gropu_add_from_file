@@ -1,0 +1,16 @@
+from pyzabbix import ZabbixAPI
+import csv
+
+
+zapi = ZabbixAPI('http://ip_address/zabbix/', user='user_name', password='user_pwd')
+
+
+groupup = csv.reader(open('zabbix_group_csv.csv'), delimiter=';')
+
+
+for [group_name] in groupup:
+    groupadd = zapi.hostgroup.create(
+        name= group_name
+        )
+
+print ("Groups upload")
